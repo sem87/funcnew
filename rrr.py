@@ -1,45 +1,44 @@
-# Декоратор
-baze = {}
+import random
 
 
 def decor(func):
     def wran(*args, **kwargs):
-        if args:
-            print(f"args - {args}")
-        if kwargs:
-            print(f"kwargs - {kwargs}")
-            for key, value in kwargs.items():
-                if hash(key) in baze.keys():
-                    print(f"Значение из словаря {baze.items()}")
-                else:
-                    baze[hash(key)] = value
-                    print(f"Значение добавляем {hash(key)}:{value}")
+        key = (args, tuple(sorted(kwargs.items())))
+        if key in wran.baze:
+            print(f"Достал из базы {wran.baze[key]}")
+            return wran.baze[key]
         res = func(*args, **kwargs)
-        if hash(res) in baze.keys():
-            print(f"Значение из словаря {baze.items()}")
-        else:
-            baze[hash(res)] = res
-            print(f"Значение res добавляем {hash(res)}:{res}")
-        print(f"Результат {res}")
+        wran.baze[key] = res
         return res
-
+    # Декоратор
+    wran.baze = {}
     return wran
 
-
 @decor
-def arif(a, b):
-    return a * b
-
-
-@decor
-def arif1(s, k, c):
+def arif(s, k, c):
     return s * k * c
 
 
 if __name__ == "__main__":
-    arif(a=37572, b=4555.5552)
-    arif(a=37572, b=4555.5552)
-    arif(a=37572, b=4555.5552)
-    arif1(s=572, k=452,c=565.225)
-    arif1(s=572, k=452, c=565.225)
-    print(f"СЛОВАРЬ{baze}")
+    # arif(a=37572, b=4555.5552)
+    # arif(a=37572, b=4555.5552)
+    # arif(a=37572, b=45)
+    for i in range(1, 100, 1):
+        s = random.randint(1,10000)
+        arif(s=s, k=4, c=5)
+    print(f"Размер кэша - {len(arif.baze)}")
+    print(arif.baze)
+    print("-----------------------------------------------------")
+    print("-----------------------------------------------------")
+    print("-----------------------------------------------------")
+    for i in range(1, 100, 1):
+        s = random.randint(1,10000)
+        arif(s=s, k=4, c=5)
+    print(f"Размер кэша - {len(arif.baze)}")
+    print(arif.baze)
+    # for i in range(1, 100, 1):
+    #     s = random.randint(1,10)
+    #     arif1(s=s, k=4, c=5)
+    # print(f"Размер кэша 2 - {len(arif1.baze)}")
+    # print(arif1.baze)
+
